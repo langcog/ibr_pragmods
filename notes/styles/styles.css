@@ -1,0 +1,605 @@
+@charset "UTF-8";
+/* CSS Document
+
+Christopher Potts
+NASSLLI 2012: Extracting Social Meaning and Sentiment
+June 18-22, 2012
+*/
+
+.page-break  { display:block; page-break-before:always; }
+
+span.pn {float:right;}
+
+span.pn:before {content: "p. "}
+
+/* *************************************************************** */
+/* **************************** page ***************************** */
+
+body {
+    padding: 0px;
+    counter-reset: section;   
+    line-height: 24px;
+    font-family: Helvetica,Arial,Georgia;
+    font-size: large;
+
+}
+
+pre, p, h1, h2, h3, h4, table, dl, div { 
+    padding-left: 5px; 
+    padding-right: 5px;
+}
+
+a { 
+    color: #881C1C; 
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+pre, p.code {
+    border-top: 3px solid #999999;
+    border-bottom: 3px solid #999999;
+}
+
+blockquote {
+    border-left: 5px solid blue;
+    padding: 5px 5px 5px 15px;
+    background-color: #E4E4E4;
+}
+
+ul li, ol li { padding-top: 5px; padding-bottom: 5px }
+ol li {list-style: decimal;}
+ol ol li { list-style: lower-alpha; }
+ol ul li { list-style: disc; }
+
+.floatleft {
+    float: left;
+    width: 60%;
+    vertical-align: top;
+}
+
+.floatright {
+    float: right;
+    width: 30%;
+    display: table;
+}
+
+
+.imgfloatright {
+    float: left;
+    display: inline;
+}
+
+/* *************************************************************** */
+/* *************************** headers *************************** */
+
+h1 a, h2 a, h3 a, h4 a { 
+    color: #000000; 
+    text-decoration: none; 
+}
+
+h1 {
+    counter-reset: ex;
+    line-height: 36px;
+}
+
+h2 { 
+    background-color: #6699FF; 
+    counter-reset: subsection;
+}
+
+h3 { 
+     background-color: #A3C2FF;
+     counter-reset: subsubsection;
+}
+
+h4 { 
+    background-color: #C2D6FF;
+}
+
+
+h1, h2 {
+    padding-top: 10px; 
+    padding-bottom: 10px; 
+}
+
+h3, h4 {
+    padding-top: 5px; 
+    padding-bottom: 5px; 
+}
+
+h2:before {
+    content: counter(section) "  ";
+    counter-increment: section;
+}
+
+h3:before {
+    content: counter(section) "." counter(subsection) "  ";
+    counter-increment: subsection;    
+}
+
+h4:before {
+    content: counter(section) "." counter(subsection) "." counter(subsubsection) "   ";
+    counter-increment: subsubsection;
+}
+
+#header {
+    border: 4px solid #53442E;
+    font-weight: bold;
+    color: black;
+    background: white; 
+    padding: 5px;
+}
+
+#coursetitle {
+    display: inline; 
+    font-size: 100%; 
+    float: left; 
+}
+
+#instructor {
+    display: inline; 
+    float: left;
+}
+
+#institution{ float: right; }
+
+#location { float: right; }
+
+/* this class should be placed on a div or break element and should be
+   the final element before the close of a container that should fully
+   contain a float 
+*/
+.clearfloat { 
+    clear:both;
+    height:0;
+    font-size: 1px;
+    line-height: 0px;
+}
+
+#footer {
+    border-top: 4px solid #53442E;
+    font-size: 90%;   
+    vertical-align: middle;
+}
+
+#footer p {
+    text-align: center; 
+    vertical-align: middle;
+}
+
+#footer img {
+    border-width:0;
+    vertical-align: bottom;
+}
+
+span.footerSep {    
+    padding: 5px 15px;    
+}
+
+/* *************************************************************** */
+/* ***************************** toc ***************************** */
+
+ol.toc {     
+    counter-reset:sec; 
+}
+
+ol.toc li {
+    list-style: none; 
+    counter-increment: sec;
+}
+
+ol.toc li:before { 
+    content: counter(sec) ". ";    
+}
+
+ol.subsec  {    
+    counter-reset:subsec; 
+}
+
+ol.subsec li {
+    list-style: none; 
+    counter-increment: subsec;
+}
+
+ol.subsec li:before { 
+    content: counter(sec) "." counter(subsec) " ";    
+}
+
+ol.subsubsec {
+    counter-reset:subsubsec;
+}
+
+ol.subsubsec li {
+    list-style: none; 
+    counter-increment: subsubsec;
+}
+
+ol.subsubsec li:before { 
+    content: counter(sec) "." counter(subsec) "." counter(subsubsec) ". ";    
+}
+
+/* *************************************************************** */
+/* ************************** hyperref *************************** */
+
+span.citet, span.cite, span.citep, span.citealt {
+    color: blue;
+}
+
+span.citep:before {content: "(";}
+span.citep:after {content: ")";}
+
+ol.bib {
+    padding: 5px;
+}
+
+ol.bib li {
+    padding: 10px 10px 10px -100px;
+    list-style: none;
+}
+
+/* *************************************************************** */
+/* *************************** tables **************************** */
+
+table {
+    border-top: 3px solid #000000;
+    border-bottom: 3px solid #000000;
+    margin: 10px auto;
+    border-collapse:collapse;
+}
+
+table.narrowcol td table.narrowcol th {
+    padding: 4px 2px;
+}
+
+table tr {
+    background-color: #DDDDDD;    
+}
+
+table tr.hdr {
+    background-color: #999999;
+    color: #000000;
+}
+
+table tr.even {
+    background-color: #EEEEEE;
+}
+
+table td, table th {
+    padding: 4px 30px;
+    vertical-align: top;
+}
+
+table td, table th {
+    text-align: left;    
+}
+
+table td.num, table th.num {
+    text-align: right;
+}
+
+table th {   
+    border-bottom: 2px solid #000000;
+}
+
+table th.rowh {
+    border: none
+}
+
+table td.boxed {
+    border: 2px solid black;
+}
+
+table td.boxedlight {
+    border: 2px solid black;
+    background-color: #EEEEEE
+}
+
+table td.light {
+    background-color: #EEEEEE
+}
+
+table td.dark {
+    background-color: #777777;
+    color: #FFFFFF;
+}
+
+table td.boxeddark {
+    border: 2px solid black;
+    background-color: #777777;
+    color: #FFFFFF;
+}
+
+
+/* *************************************************************** */
+/* ************************** examples *************************** */
+
+ol.ex {
+    background-color:#FFFFFF;   
+    border: none;     
+}
+
+ol.ex li {
+    list-style: decimal; 
+    padding: 2px 0px;
+}
+
+ol.subex li { 
+    list-style:lower-alpha;
+    padding: 2px 0px;
+}
+
+ol.subsubex li { 
+    list-style:lower-roman;
+    padding: 2px 0px;
+}
+
+ol.dialogue {
+    padding: 10px 20px;
+}
+
+ol.dialogue li {
+    list-style:none;
+    padding: 2px 0px;
+}
+
+/* *************************************************************** */
+/* ************************* definitions ************************* */
+
+
+dl {
+    font-family: Times;
+    background-color:#FFFFFF; /* #E4E4E4; */
+    border-top: 2px solid #999999;
+    border-bottom: 2px solid #999999;
+}
+
+dt {
+    font-weight: bold;
+    padding: 5px;
+}
+
+dd {
+    padding: 5px;
+}
+    
+/* *************************************************************** */
+/* ***************************** demo **************************** */
+
+div.demo {
+    background-color:#E4E4E4;  
+    text-align: left;
+    padding: 10px;
+    margin: 10px 0px;
+}
+
+div.demo span.label {
+    text-align: left;
+    font-weight: bold;
+    padding-right: 25px;
+}
+div.demolink {
+    text-align: center;
+}
+
+/* *************************************************************** */
+/* *************************** figures *************************** */
+
+div.figure {
+    background-color:#FDFFFF; 
+    border-top: 4px solid #999999;
+    border-bottom: 4px solid #999999;
+    text-align: center;
+    padding: 5px;
+    margin: 20px auto;
+}
+
+div.caption {
+    font-weight: normal; 
+    text-align: left;
+}
+
+div.figlabel {
+    display: inline;
+    text-align: left;
+    font-weight: bold; 
+    padding-left: 0;   
+    padding-right: 15px;   
+}
+
+div.captiontext {
+    display: inline;
+    text-align: left;
+    font-weight: normal; 
+    padding-right: 0;   
+}
+
+span.figref, span.figlabel { }
+
+div.panel img {
+    margin: 10px auto;
+    display: inline;
+    border: 1px solid black;
+}
+
+div.panel {
+    margin: 0px auto;
+    display: block;
+    margin: 10px auto;
+}
+
+div.leftsubpanel {
+    float: left;
+}
+
+div.rightsubpanel {
+    float: right;
+}
+
+
+/* *************************************************************** */
+/* ************************** problems *************************** */
+
+div.problem {
+    border-top: 2px solid #999999;
+    border-bottom: 2px solid #999999;
+    padding: 0px 0px; 
+    margin: 20px 0px;
+    background-color: #EEEEEE;
+}
+
+div.problem ol li {
+     list-style: lower-alpha;     
+}
+
+p.problink {
+    background: #E7D19A;
+    padding: 5px;
+    border: 2px solid black;
+    width: 50%;
+}
+
+p.problink:before {
+    content: "Related: ";
+    font-weight: bold;
+    font-style: italic;
+}
+
+span.probcounter {
+    padding-right: 10px;
+    font-weight: bold;
+}
+
+div.solution {
+    display: none;
+    background-color: #CCCCCC;
+    padding: 5px 5px 5px 5px;
+    margin-top: 0
+}
+
+p.solutionToggle {
+    text-align: center;
+    background-color: #CCCCCC;
+    padding: 5px 5px 5px 5px;
+    margin-bottom: 0;
+}
+
+
+/* *************************************************************** */
+/* ************************* code/fonts ************************** */
+
+span.word { font-style: normal; font-weight: bold; font-family: Courier; color: #005758; }
+span.posword { font-style: normal; font-family: Courier; color: blue; }
+span.negword { font-style: normal; font-family: Courier; color: red; }
+
+
+span.lemma { font-style: italic; }
+span.var { font-style: italic;}
+
+span.scale { font-family: monospace; }
+span.scale:before { content: "<"; }
+span.scale:after { content: ">"; }
+
+.rawtext { font-family: monospace; background-color: #F0F5FF; white-space: pre; border: 2px solid black; padding: 5px; line-height: 22px;}
+
+span.math, div.equation {font-family: monospace;}
+
+div.equation {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    text-align: center;
+}
+
+img.equation {
+    text-align: center;
+    display:block;
+}
+
+span.filename { font-family: monospace; }
+
+span.wn, span.rcode, span.pycode { font-family: monospace; }
+
+ol.rcode, ol.rscript, ol.pycode, ol.pyscript {
+    border: 2px solid black;
+    padding: 1px 5px;
+    margin: 5px 0px;        
+}
+
+ol.rcode li, ol.rscript li, ol.pycode li, ol.pyscript li {
+    margin: 0;
+    padding: 1px 1px;
+    white-space: pre; 
+    font-family: monospace;
+}
+
+/* **************************************** */
+/* ******************* R ****************** */
+
+div.regex {
+    border-top: 3px solid #999999;
+    border-bottom: 3px solid #999999;
+    background-color: #F0F5FF; 
+}
+
+div.regexlabel {
+    background-color: #F0F5FF; 
+    border-bottom: 2px solid black;
+}
+
+div.regex pre {
+    border: none;
+}
+
+ol.rcode li, ol.rscript li, span.rcode {
+    list-style: none;
+    font-weight: bold;
+    color: #3300FF;
+}
+
+ol.rcode li.cmt, ol.rscript li.cmt, ol.rcode span.cmt {
+    color: #881C1C;
+}
+
+ol.rcode li.rout, ol.rscript li.rout {
+    color: #000000;
+    font-weight: bold;    
+}
+
+
+ol.rcode li.rout:before, ol.rscript li.rout:before {
+    content: " ";
+}
+
+/* **************************************** */
+/* **************** Python **************** */
+
+ol.pycode, ol.pyscript {
+    background-color: #F0F5FF; 
+}
+
+span.pycode {
+    font-weight: bold;
+}
+
+ol.pycode li, ol.pyscript li {
+    list-style: none;
+    font-weight: bold;
+}
+
+ol.pycode li.cmt, ol.pyscript li.cmt, ol.pycode span.cmt, ol.pyscript span.cmt {
+    color: #881c1c;
+}
+
+ol.pyscript li.docstr {
+    color:green;
+}
+
+ol.pycode li.pyo, ol.pyscript li.pyo, span.pyo {
+    font-family: monospace;
+    color: #3300FF;
+    font-weight: bold;
+}
+
+ol.pycode li:before { content: ">>> "; color: #8B008B; }
+
+ol.pycode li.pyo:before { content: ""; }
+

@@ -1,0 +1,189 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>On whether to argmax</title>
+    <link rel="stylesheet" type="text/css" href="styles/styles.css" />
+    <script src="styles/counters.js" type="text/javascript"></script>
+  </head>
+<body>
+
+
+<h1>On whether to argmax</h1>
+
+<p>Chris Potts, 2012-07-19</p>
+
+<ol class="toc">
+  <li><a href="#overview">Overview</a></li>
+  <li><a href="#mats">Relevant matrices</a></li>
+  <li><a href="#ibr">Standard IBR output</a></li>
+  <li><a href="#surprisal">Surprisal IBR output</a></li>
+  <li><a href="#softmax">IBR without argmax</a></li>
+  <li><a href="#sursoft">SurprisalIBR without argmax</a></li>
+  <li><a href="#fg">The Frank&ndash;Goodman speaker</a></li>
+</ol>
+
+<h2><a id="overview">Overview</a></h2>
+
+<p>This page presents two 3 &times; 3 matrices that highlight the differences between taking argmax, as in standard IBR, and not taking it. High-level summary:</p>
+
+<ol>
+  <li>The two matrices are not different in relevant ways.</li>
+  <li>Standard IBR converges on one kind of &lt;speaker, listener&gt; pair, whereas all the other models converge on another. Both the speaker and the listener differ.</li>
+  <li>The crucial factor in the two kinds of output is whether one uses argmax.</li>
+  <li>If <span class="rcode">IBR</span> is run with <span class="rcode">SurprisalSpeaker</span> as the initial function, it groups with the <span class="rcode">argmax=FALSE</span> functions and against plain <span class="rcode">IBR</span>. The reason is that <span class="rcode">SurprisalSpeaker</span> incorporates <a href="#fg">the equivalent of two non-argmax listeners</a>, allowing it to simulate, in early stages, an <span class="rcode">argmax=FALSE</span> model.  In many cases, if <span class="rcode">SurprisalIBR</span> runs longer, it converges towards <span class="rcode">IBR</span>.</li>
+</ol>
+
+<p>The initial exploration was done with <span class="rcode">CheckArgmax</span> in <tt>experimentPrep.R</tt></p>
+
+<h2><a id="mats">Relevant matrices</a></h2>
+
+<p>In the space of 3 &times; 3 matrices, there are exactly two that give different outputs depending in whether we argmax. Here I give them with their corresponding helper visualizations</p>
+
+<ol class="rcode">
+<li>m1 = matrix(c(0,1,1,1,0,1,1,0,1), byrow=T, nrow=3)</li>
+<li>rownames(m1) = c('r1','r2','r3')</li>
+<li>colnames(m1) = c('hat','glasses','mustache')</li>
+<li>m1</li>
+<li class="rout">   hat glasses mustache</li>
+<li class="rout">r1   0       1        1</li>
+<li class="rout">r2   1       0        1</li>
+<li class="rout">r3   1       0        1</li>
+<li>&nbsp;</li>
+<li>MatrixViz(m1, print.matrix=T)</li>
+<li><img src="figures/argmax-m1.png" alt="Depiction of m1" width="900" height="225" /></li>
+</ol>
+
+
+<ol class="rcode">
+<li>m2 = matrix(c(0,1,1,0,1,1,1,0,1), byrow=T, nrow=3)</li>
+<li>rownames(m2) = c('r1','r2','r3')</li>
+<li>colnames(m2) = c('hat','glasses','mustache')</li>
+<li>m2</li>
+<li>   hat glasses mustache</li>
+<li>r1   0       1        1</li>
+<li>r2   0       1        1</li>
+<li>r3   1       0        1</li>
+<li>&nbsp;</li>
+<li>MatrixViz(m2, print.matrix=T)</li>
+<li><img src="figures/argmax-m2.png" alt="Depiction of m2" width="900" height="225" /></li>
+</ol>
+
+<p>These are not really different conceptually. In both, all three rows have exactly two 1s on them.  Two of the rows are the same, and the third is different.</p>
+
+<p>For the rest of this page, I illustrate with <span class="rcode">m1</span>. The steps for <span class="rcode">m2</span> are the same in all cases</p>
+
+
+<h2><a id="ibr">Standard IBR output</a></h2>
+
+<ol class="rcode">
+<li>IBR(m1)</li>
+<li class="rout">[[1]] <span class="cmt">## Speaker</span></li>
+<li class="rout">   hat glasses mustache</li>
+<li class="rout">r1 0.0     0.5      0.5</li>
+<li class="rout">r2 0.5     0.0      0.5</li>
+<li class="rout">r3 0.5     0.0      0.5</li>
+<li class="rout">&nbsp;</li>
+<li class="rout">[[2]] <span class="cmt">## Listener</span></li>
+<li class="rout">           r1   r2   r3</li>
+<li class="rout">hat      0.00 0.50 0.50</li>
+<li class="rout">glasses  1.00 0.00 0.00</li>
+<li class="rout">mustache 0.33 0.33 0.33</li>
+<li class="rout">&nbsp;</li>
+<li class="rout">[[3]] <span class="cmt">## Speaker</span></li>
+<li class="rout">   hat glasses mustache</li>
+<li class="rout">r1   0       1        0</li>
+<li class="rout">r2   1       0        0</li>
+<li class="rout">r3   1       0        0</li>
+</ol>
+
+
+
+<h2><a id="surprisal">Surprisal IBR output</a></h2>
+
+<p><span class="rcode">SurprisalIBR</span> is <span class="rcode">IBR</span> but we begin with <span class="rcode">SurprisalSpeaker</span> rather than <span class="rcode">S0</span>:</p>
+
+<ol class="rcode">
+<li>SurprisalIBR(m1)</li>
+<li class="rout">[[1]] <span class="cmt">## Speaker</span></li>
+<li class="rout">   hat glasses mustache</li>
+<li class="rout">r1 0.0    0.75     0.25</li>
+<li class="rout">r2 0.6    0.00     0.40</li>
+<li class="rout">r3 0.6    0.00     0.40</li>
+<li class="rout">&nbsp;</li>
+<li class="rout">[[2]] <span class="cmt">## Listener</span></li>
+<li class="rout">         r1  r2  r3</li>
+<li class="rout">hat       0 0.5 0.5</li>
+<li class="rout">glasses   1 0.0 0.0</li>
+<li class="rout">mustache  0 0.5 0.5</li>
+<li class="rout">&nbsp;</li>
+<li class="rout">[[3]] <span class="cmt">## Speaker</span></li>
+<li class="rout">   hat glasses mustache</li>
+<li class="rout">r1 0.0       1      0.0</li>
+<li class="rout">r2 0.5       0      0.5</li>
+<li class="rout">r3 0.5       0      0.5</li>
+</ol>
+
+
+
+<h2><a id="softmax">IBR without argmax</a></h2>
+
+<p>If we set <span class="rcode">argmax=FALSE</span>, then the progression is towards the output of <span class="rcode">SurprisalIBR</span>.</p>
+
+<ol class="rcode">
+<li>Iterator(m1, argmax=FALSE, maxiter=10000)</li>
+<li class="rout">[[1]] <span class="cmt">## Speaker</span></li>
+<li class="rout">   hat glasses mustache</li>
+<li class="rout">r1 0.0     0.5      0.5</li>
+<li class="rout">r2 0.5     0.0      0.5</li>
+<li class="rout">r3 0.5     0.0      0.5</li>
+<li class="rout">&nbsp;</li>
+<li class="rout">[[2]] <span class="cmt">## Listener</span></li>
+<li class="rout">                r1        r2        r3</li>
+<li class="rout">hat      0.0000000 0.5000000 0.5000000</li>
+<li class="rout">glasses  1.0000000 0.0000000 0.0000000</li>
+<li class="rout">mustache 0.3333333 0.3333333 0.3333333</li>
+<li class="rout">.</li>
+<li class="rout">.</li>
+<li class="rout">.</li>
+<li class="rout">[[9999]] <span class="cmt">## Speaker</span></li>
+<li class="rout">         hat   glasses     mustache</li>
+<li class="rout">r1 0.0000000 0.9998666 0.0001333919</li>
+<li class="rout">r2 0.5000334 0.0000000 0.4999666453</li>
+<li class="rout">r3 0.5000334 0.0000000 0.4999666453</li>
+<li class="rout">[[10000]] <span class="cmt">## Listener</span></li>
+<li class="rout">                  r1        r2        r3</li>
+<li class="rout">hat      0.000000000 0.5000000 0.5000000</li>
+<li class="rout">glasses  1.000000000 0.0000000 0.0000000</li>
+<li class="rout">mustache 0.000133383 0.4999333 0.4999333</li>
+</ol>
+
+
+<h2><a id="sursoft">Surprisal IBR without argmax</a></h2>
+
+<p>The output here is the same as the output for <span class="rcode">IBR</span> with <span class="rcode">argmax=FALSE</span>.</p>
+
+
+<h2><a id="fg">The Frank&ndash;Goodman speaker</a></h2>
+
+<p>There are three equivalent ways of specifying the Frank&ndash;Goodman model using our code:</p>
+
+<ol>
+  <li><span class="rcode">FG(m1)</span></li>
+  <li><span class="rcode">Lbayes(SurprisalSpeaker(m1), m1)</span></li>
+  <li><span class="rcode">Lbayes(S(L(S0(m1), m1)), m1)</span></li>
+</ol>
+
+<p>The output tends in the direction of <span class="rcode">SurprisalIBR</span> and the <span class="rcode">argmax=FALSE</span> models:</p>
+
+<ol class="rcode">
+<li class="rout">           r1   r2   r3</li>
+<li class="rout">hat      0.00 0.50 0.50</li>
+<li class="rout">glasses  1.00 0.00 0.00</li>
+<li class="rout">mustache 0.24 0.38 0.38</li>
+</ol>
+
+<p>If <span class="rcode">FG</span> were allowed to iterate with <span class="rcode">Lbayes</span> and <span class="rcode">S</span>, it would end up like <span class="rcode">IBR(m1, argmax=FALSE)</span>.</p>
+
+</body>
+</html>
