@@ -69,9 +69,9 @@ Lbayes(S(L(S0(fg), sem=fg)), sem=fg, prior=prior)
 
 ## Contributors ##
 
-[http://www.stanford.edu/~mcfrank/ Michael C. Frank], 
-[http://www.stanford.edu/~ngoodman/ Noah D. Goodman], and
-[http://www.stanford.edu/~cgpotts/ Christopher Potts]
+[Michael C. Frank](http://www.stanford.edu/~mcfrank/), 
+[Noah D. Goodman](http://www.stanford.edu/~ngoodman/), and
+[Christopher Potts](http://www.stanford.edu/~cgpotts/).
 
 
 ## Core references ##
