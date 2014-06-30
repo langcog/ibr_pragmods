@@ -41,7 +41,7 @@ Sstar(Lstar(S0(scalars), scalars))
 though IBR allows iteration to arbitrary depth (until convergence, which is guaranteed).
 
 
-## Frank and Goodman 2012 example ##
+### Frank and Goodman 2012 example ###
 
 ```
 ## Scenario from figure 1A:
@@ -67,14 +67,14 @@ Lbayes(S(L(S0(fg), sem=fg)), sem=fg, prior=prior)
 ```
 
 
-# Contributors #
+## Contributors ##
 
 [http://www.stanford.edu/~mcfrank/ Michael C. Frank], 
 [http://www.stanford.edu/~ngoodman/ Noah D. Goodman], and
 [http://www.stanford.edu/~cgpotts/ Christopher Potts]
 
 
-# Core references #
+## Core references ##
 
 Frank, Michael C. and Goodman, Noah D.. 2012. Predicting pragmatic reasoning in language games. _Science_ 336(6084): 998.
 
